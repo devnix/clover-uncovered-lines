@@ -236,7 +236,6 @@ XML;
         try {
             $result = $this->cloverUncoveredLinesParser->parse($tempFile);
 
-            // Should strip /var/www/project prefix
             self::assertArrayHasKey('src/Foo.php', $result);
             self::assertArrayHasKey('tests/Bar.php', $result);
         } finally {
@@ -267,7 +266,6 @@ XML;
         try {
             $result = $this->cloverUncoveredLinesParser->parse($tempFile);
 
-            // Should find common prefix /abc
             self::assertCount(2, $result);
         } finally {
             unlink($tempFile);

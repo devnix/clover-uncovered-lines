@@ -23,7 +23,6 @@ final class OutputFormatter
             $output .= "\n";
         }
 
-        // Summary stats
         $totalFiles = \count($uncoveredByFile);
         $totalLines = array_sum(array_map('count', $uncoveredByFile));
 

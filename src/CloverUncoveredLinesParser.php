@@ -39,12 +39,9 @@ final class CloverUncoveredLinesParser
     private function extractUncoveredLines(\SimpleXMLElement $xml): array
     {
         $uncoveredByFile = [];
-        $projectRoot = $this->projectRoot;
-
-        // Auto-detect project root from XML if not provided
-        if ('' === $projectRoot) {
-            $projectRoot = $this->detectProjectRoot($xml);
-        }
+        $projectRoot = '' === $this->projectRoot
+            ? $this->detectProjectRoot($xml)
+            : $this->projectRoot;
 
         $files = $xml->xpath('//file');
 
@@ -67,15 +64,11 @@ final class CloverUncoveredLinesParser
             $uncoveredLines = [];
 
             foreach ($file->line as $line) {
-                $lineNum = (int) $line['num'];
-                $count = (int) $line['count'];
-
                 // Line not covered
-                if (0 === $count) {
-                    $type = (string) $line['type'];
+                if (0 === (int) $line['count']) {
                     $uncoveredLines[] = [
-                        'num' => $lineNum,
-                        'type' => $type,
+                        'num' => (int) $line['num'],
+                        'type' => (string) $line['type'],
                     ];
                 }
             }
@@ -95,13 +88,11 @@ final class CloverUncoveredLinesParser
             return \dirname(__DIR__);
         }
 
-        // Collect all unique directory parts to find common ancestor
-        $allPaths = [];
-        foreach ($files as $file) {
-            $allPaths[] = (string) $file['name'];
-        }
+        $allPaths = array_map(
+            fn (\SimpleXMLElement $file): string => (string) $file['name'],
+            $files
+        );
 
-        // Find common prefix of all paths
         $commonPrefix = $allPaths[0];
         foreach ($allPaths as $allPath) {
             $len = min(\strlen($commonPrefix), \strlen($allPath));
@@ -115,7 +106,6 @@ final class CloverUncoveredLinesParser
             $commonPrefix = substr($commonPrefix, 0, $len);
         }
 
-        // Ensure we end at a directory boundary
         $lastSlash = strrpos($commonPrefix, '/');
         if (false !== $lastSlash) {
             $commonPrefix = substr($commonPrefix, 0, $lastSlash);
