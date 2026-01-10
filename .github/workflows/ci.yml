@@ -36,6 +36,9 @@ jobs:
         with:
           dependency-versions: "${{ matrix.dependency-versions }}"
 
+      - name: "Validate and lint Composer"
+        run: " composer validate && composer normalize --dry-run"
+
       - name: "PHP CS Fixer"
         run: "vendor/bin/php-cs-fixer fix --diff --dry-run"
 
@@ -54,6 +57,9 @@ jobs:
           flag-name: "run-${{ join(matrix.*, '-') }}"
           parallel: true
           file: "var/clover.xml"
+
+      - name: "Infection"
+        run: "vendor/bin/infection --static-analysis-tool=phpstan"
 
   finish:
     needs: "coding-standards"

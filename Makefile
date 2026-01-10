@@ -74,6 +74,7 @@ lint/composer: lint/composer/check ## -- 📦 Lint Composer configuration.
 
 .PHONY: lint/composer/check
 lint/composer/check: ## -- 🔎 Check Composer dependencies for issues.
+	composre validate
 	composer normalize --dry-run
 
 .PHONY: lint/fix
