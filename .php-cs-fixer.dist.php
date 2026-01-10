@@ -24,5 +24,5 @@ return (new PhpCsFixer\Config())
         'native_constant_invocation' => ['strict' => false],
         'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => true],
     ])
-    ->setCacheFile('.php-cs-fixer.cache')
+    ->setCacheFile('var/cache/.php-cs-fixer.cache')
 ;
