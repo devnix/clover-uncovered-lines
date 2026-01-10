@@ -14,7 +14,7 @@
     },
     "logs": {
         "stryker": {
-            "report": "/^release-.*$/"
+            "badge": "main"
         }
     }
 }
