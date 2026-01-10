@@ -60,6 +60,8 @@ jobs:
 
       - name: "Infection"
         run: "vendor/bin/infection --static-analysis-tool=phpstan"
+        env:
+          INFECTION_DASHBOARD_API_KEY: ${{ secrets.INFECTION_DASHBOARD_API_KEY }}
 
   finish:
     needs: "coding-standards"
