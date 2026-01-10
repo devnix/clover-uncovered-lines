@@ -1,5 +1,7 @@
 # Clover Uncovered Lines
 
+[![Coverage Status](https://coveralls.io/repos/github/devnix/clover-uncovered-lines/badge.svg?branch=main)](https://coveralls.io/github/devnix/clover-uncovered-lines?branch=main)
+
 A simple CLI tool to parse Clover XML coverage reports and display uncovered lines in a human(-and-llm)-readable format.
 
 ## Installation
