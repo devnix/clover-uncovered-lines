@@ -47,7 +47,9 @@ final class CloverUncoveredLinesParser
         }
 
         $files = $xml->xpath('//file');
+
         // @codeCoverageIgnoreStart
+
         if (!\is_array($files)) {
             return [];
         }

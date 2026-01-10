@@ -13,6 +13,7 @@ help: ## ❓ Display this help screen.
 
 .PHONY: coding-style
 coding-style: coding-style/check ## 👮 Alias to check for coding style violations.
+coding-style: coding-style/check ## 👮 Check for coding style violations (alias).
 
 .PHONY: coding-style/check
 coding-style/check: coding-style/check/php-cs-fixer coding-style/check/rector ## 👀 Check for violations using all coding style tools (dry-run).
@@ -27,6 +28,7 @@ coding-style/check/rector: ## -- 🧐 Preview Rector refactorings without applyi
 
 .PHONY: coding-style/format
 coding-style/format: coding-style/format/php-cs-fixer coding-style/format/rector ## ✨ Automatically fix all coding style violations.
+coding-style/format: coding-style/format/rector coding-style/format/php-cs-fixer ## ✨ Automatically fix all coding style violations.
 
 .PHONY: coding-style/format/php-cs-fixer
 coding-style/format/php-cs-fixer: ## -- 🎨 Automatically apply PHP-CS-Fixer fixes.
@@ -58,3 +60,28 @@ tests: tests/unit ## ✅ Run all test suites.
 tests/unit: ## -- 🧪 Run PHPUnit tests.
 	XDEBUG_MODE=coverage vendor/bin/phpunit
 	bin/clover-uncovered-lines var/coverage/clover.xml
+	vendor/bin/infection --static-analysis-tool=phpstan
+
+# ==============================================================================
+# Linting
+# ==============================================================================
+
+.PHONY: lint
+lint: lint/composer ## 🔍 Run all linting checks.
+
+.PHONY: lint/composer
+lint/composer: lint/composer/check ## -- 📦 Lint Composer configuration.
+
+.PHONY: lint/composer/check
+lint/composer/check: ## -- 🔎 Check Composer dependencies for issues.
+	composer normalize --dry-run
+
+.PHONY: lint/fix
+lint/fix: lint/composer/fix ## 🔧 Automatically fix all linting issues.
+
+.PHONY: lint/composer/fix
+lint/composer/fix: ## -- 🔧 Fix Composer dependency issues.
+	composer normalize --diff
+
+.PHONY: check
+check: lint coding-style static-analysis tests ## 🔍 Run all checks: coding style, static analysis, and tests.

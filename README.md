@@ -1,6 +1,7 @@
 # Clover Uncovered Lines
 
 [![Coverage Status](https://coveralls.io/repos/github/devnix/clover-uncovered-lines/badge.svg?branch=main)](https://coveralls.io/github/devnix/clover-uncovered-lines?branch=main)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fdevnix%2Fclover-uncovered-lines%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/devnix/clover-uncovered-lines/main)
 
 A simple CLI tool to parse Clover XML coverage reports and display uncovered lines in a human(-and-llm)-readable format.
 

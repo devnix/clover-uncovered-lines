@@ -38,9 +38,8 @@ final class OutputFormatterTest extends TestCase
 
         $result = $this->outputFormatter->format($uncoveredByFile);
 
-        self::assertStringContainsString('src/Example.php', $result);
-        self::assertStringContainsString('Line 10', $result);
-        self::assertStringContainsString('Summary: 1 uncovered lines in 1 file(s)', $result);
+        self::assertStringContainsString("src/Example.php\n  Line 10", $result);
+        self::assertStringEndsWith("Summary: 1 uncovered lines in 1 file(s)\n", $result);
     }
 
     #[Test]
@@ -56,9 +55,7 @@ final class OutputFormatterTest extends TestCase
 
         $result = $this->outputFormatter->format($uncoveredByFile);
 
-        self::assertStringContainsString('Line 10', $result);
-        self::assertStringContainsString('Line 15', $result);
-        self::assertStringContainsString('Line 20', $result);
+        self::assertStringContainsString("  Line 10\n  Line 15\n  Line 20\n", $result);
         self::assertStringContainsString('Summary: 3 uncovered lines in 1 file(s)', $result);
     }
 
