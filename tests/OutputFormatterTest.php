@@ -12,17 +12,17 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(OutputFormatter::class)]
 final class OutputFormatterTest extends TestCase
 {
-    private OutputFormatter $formatter;
+    private OutputFormatter $outputFormatter;
 
     protected function setUp(): void
     {
-        $this->formatter = new OutputFormatter();
+        $this->outputFormatter = new OutputFormatter();
     }
 
     #[Test]
     public function formatsEmptyResultAsAllCovered(): void
     {
-        $result = $this->formatter->format([]);
+        $result = $this->outputFormatter->format([]);
 
         self::assertSame("✓ All lines are covered!\n", $result);
     }
@@ -36,7 +36,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('src/Example.php', $result);
         self::assertStringContainsString('Line 10', $result);
@@ -54,7 +54,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('Line 10', $result);
         self::assertStringContainsString('Line 15', $result);
@@ -74,7 +74,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('Lines 10-12', $result);
         self::assertStringContainsString('Line 15', $result);
@@ -93,7 +93,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('Line 10', $result);
         self::assertStringContainsString('Line 11 (method)', $result);
@@ -110,7 +110,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('Line 10 (method)', $result);
     }
@@ -125,7 +125,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('Lines 10-11 (method)', $result);
     }
@@ -143,7 +143,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('src/Example.php', $result);
         self::assertStringContainsString('src/Another.php', $result);
@@ -164,7 +164,7 @@ final class OutputFormatterTest extends TestCase
             ],
         ];
 
-        $result = $this->formatter->format($uncoveredByFile);
+        $result = $this->outputFormatter->format($uncoveredByFile);
 
         self::assertStringContainsString('Lines 10-12', $result);
         self::assertStringContainsString('Lines 15-16 (method)', $result);

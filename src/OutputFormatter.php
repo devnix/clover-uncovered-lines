@@ -11,14 +11,14 @@ final class OutputFormatter
      */
     public function format(array $uncoveredByFile): string
     {
-        if (0 === \count($uncoveredByFile)) {
+        if ([] === $uncoveredByFile) {
             return "✓ All lines are covered!\n";
         }
 
         $output = "Uncovered lines:\n\n";
 
         foreach ($uncoveredByFile as $filename => $lines) {
-            $output .= "{$filename}\n";
+            $output .= $filename.\PHP_EOL;
             $output .= $this->formatLinesForFile($lines);
             $output .= "\n";
         }
@@ -27,9 +27,7 @@ final class OutputFormatter
         $totalFiles = \count($uncoveredByFile);
         $totalLines = array_sum(array_map('count', $uncoveredByFile));
 
-        $output .= "Summary: {$totalLines} uncovered lines in {$totalFiles} file(s)\n";
-
-        return $output;
+        return $output."Summary: {$totalLines} uncovered lines in {$totalFiles} file(s)\n";
     }
 
     /**
@@ -42,11 +40,11 @@ final class OutputFormatter
 
         foreach ($ranges as $range) {
             $lineRef = $range['start'] === $range['end']
-                ? "  Line {$range['start']}"
-                : "  Lines {$range['start']}-{$range['end']}";
+                ? '  Line '.$range['start']
+                : \sprintf('  Lines %d-%d', $range['start'], $range['end']);
 
             $typeLabel = 'method' === $range['type'] ? ' (method)' : '';
-            $output .= "{$lineRef}{$typeLabel}\n";
+            $output .= $lineRef.$typeLabel.\PHP_EOL;
         }
 
         return $output;

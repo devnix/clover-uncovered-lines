@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 final class CloverUncoveredLinesParserTest extends TestCase
 {
-    private CloverUncoveredLinesParser $parser;
+    private CloverUncoveredLinesParser $cloverUncoveredLinesParser;
 
     protected function setUp(): void
     {
-        $this->parser = new CloverUncoveredLinesParser();
+        $this->cloverUncoveredLinesParser = new CloverUncoveredLinesParser();
     }
 
     #[Test]
@@ -23,7 +23,7 @@ final class CloverUncoveredLinesParserTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('File not found');
 
-        $this->parser->parse('/non/existent/file.xml');
+        $this->cloverUncoveredLinesParser->parse('/non/existent/file.xml');
     }
 
     #[Test]
@@ -37,7 +37,7 @@ final class CloverUncoveredLinesParserTest extends TestCase
         $this->expectExceptionMessage('Failed to read file');
 
         try {
-            $this->parser->parse($tempFile);
+            $this->cloverUncoveredLinesParser->parse($tempFile);
         } finally {
             chmod($tempFile, 0644);
             unlink($tempFile);
@@ -54,7 +54,7 @@ final class CloverUncoveredLinesParserTest extends TestCase
         $this->expectExceptionMessage('Failed to parse XML file');
 
         try {
-            $this->parser->parse($tempFile);
+            $this->cloverUncoveredLinesParser->parse($tempFile);
         } finally {
             unlink($tempFile);
         }
@@ -80,7 +80,7 @@ XML;
         file_put_contents($tempFile, $xmlContent);
 
         try {
-            $result = $this->parser->parse($tempFile);
+            $result = $this->cloverUncoveredLinesParser->parse($tempFile);
             self::assertEmpty($result);
         } finally {
             unlink($tempFile);
@@ -107,10 +107,10 @@ XML;
         $tempFile = tempnam(sys_get_temp_dir(), 'clover');
         file_put_contents($tempFile, $xmlContent);
 
-        $parser = new CloverUncoveredLinesParser('/project');
+        $cloverUncoveredLinesParser = new CloverUncoveredLinesParser('/project');
 
         try {
-            $result = $parser->parse($tempFile);
+            $result = $cloverUncoveredLinesParser->parse($tempFile);
 
             self::assertArrayHasKey('src/Example.php', $result);
             self::assertCount(2, $result['src/Example.php']);
@@ -147,10 +147,10 @@ XML;
         $tempFile = tempnam(sys_get_temp_dir(), 'clover');
         file_put_contents($tempFile, $xmlContent);
 
-        $parser = new CloverUncoveredLinesParser('/project');
+        $cloverUncoveredLinesParser = new CloverUncoveredLinesParser('/project');
 
         try {
-            $result = $parser->parse($tempFile);
+            $result = $cloverUncoveredLinesParser->parse($tempFile);
 
             self::assertCount(2, $result);
             self::assertArrayHasKey('src/Example.php', $result);
@@ -180,10 +180,10 @@ XML;
         $tempFile = tempnam(sys_get_temp_dir(), 'clover');
         file_put_contents($tempFile, $xmlContent);
 
-        $parser = new CloverUncoveredLinesParser('/custom/path');
+        $cloverUncoveredLinesParser = new CloverUncoveredLinesParser('/custom/path');
 
         try {
-            $result = $parser->parse($tempFile);
+            $result = $cloverUncoveredLinesParser->parse($tempFile);
 
             self::assertArrayHasKey('src/Example.php', $result);
         } finally {
@@ -206,7 +206,7 @@ XML;
         file_put_contents($tempFile, $xmlContent);
 
         try {
-            $result = $this->parser->parse($tempFile);
+            $result = $this->cloverUncoveredLinesParser->parse($tempFile);
             self::assertEmpty($result);
         } finally {
             unlink($tempFile);
@@ -234,7 +234,7 @@ XML;
         file_put_contents($tempFile, $xmlContent);
 
         try {
-            $result = $this->parser->parse($tempFile);
+            $result = $this->cloverUncoveredLinesParser->parse($tempFile);
 
             // Should strip /var/www/project prefix
             self::assertArrayHasKey('src/Foo.php', $result);
@@ -265,7 +265,7 @@ XML;
         file_put_contents($tempFile, $xmlContent);
 
         try {
-            $result = $this->parser->parse($tempFile);
+            $result = $this->cloverUncoveredLinesParser->parse($tempFile);
 
             // Should find common prefix /abc
             self::assertCount(2, $result);

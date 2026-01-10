@@ -17,12 +17,12 @@ final class CloverUncoveredLinesParser
     public function parse(string $cloverPath): array
     {
         if (!file_exists($cloverPath)) {
-            throw new \RuntimeException("File not found: {$cloverPath}");
+            throw new \RuntimeException('File not found: '.$cloverPath);
         }
 
         $content = @file_get_contents($cloverPath);
         if (false === $content) {
-            throw new \RuntimeException("Failed to read file: {$cloverPath}");
+            throw new \RuntimeException('Failed to read file: '.$cloverPath);
         }
 
         $xml = @simplexml_load_string($content);
@@ -51,6 +51,7 @@ final class CloverUncoveredLinesParser
         if (!\is_array($files)) {
             return [];
         }
+
         // @codeCoverageIgnoreEnd
 
         foreach ($files as $file) {
@@ -77,7 +78,7 @@ final class CloverUncoveredLinesParser
                 }
             }
 
-            if (\count($uncoveredLines) > 0) {
+            if ([] !== $uncoveredLines) {
                 $uncoveredByFile[$filename] = $uncoveredLines;
             }
         }
@@ -88,7 +89,7 @@ final class CloverUncoveredLinesParser
     private function detectProjectRoot(\SimpleXMLElement $xml): string
     {
         $files = $xml->xpath('//file');
-        if (!\is_array($files) || 0 === \count($files)) {
+        if (!\is_array($files) || [] === $files) {
             return \dirname(__DIR__);
         }
 
@@ -100,14 +101,15 @@ final class CloverUncoveredLinesParser
 
         // Find common prefix of all paths
         $commonPrefix = $allPaths[0];
-        foreach ($allPaths as $path) {
-            $len = min(\strlen($commonPrefix), \strlen($path));
+        foreach ($allPaths as $allPath) {
+            $len = min(\strlen($commonPrefix), \strlen($allPath));
             for ($i = 0; $i < $len; ++$i) {
-                if ($commonPrefix[$i] !== $path[$i]) {
+                if ($commonPrefix[$i] !== $allPath[$i]) {
                     $commonPrefix = substr($commonPrefix, 0, $i);
                     break;
                 }
             }
+
             $commonPrefix = substr($commonPrefix, 0, $len);
         }
 
